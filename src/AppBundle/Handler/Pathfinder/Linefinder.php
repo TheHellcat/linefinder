@@ -90,7 +90,7 @@ class Linefinder
                 $searching = false;
             }
 
-//            $map->set($node->getPosition()->getX(), $node->getPosition()->getY(), $node->getDirectionVector()->getX().$node->getDirectionVector()->getY());
+//            $map->set($node->getPosition()->getX(), $node->getPosition()->getY(), $node->getCost() );
 //            echo "<pre>\n";
 //            for ($y = 0; $y < $map->getSizeY(); $y++) {
 //                for ($x = 0; $x < $map->getSizeX(); $x++) {
@@ -124,7 +124,7 @@ class Linefinder
      * @param Nodes $closed
      * @param Nodes $open
      */
-    private function putAdjacentNodes(Node $current, Nodes $closed, Nodes $open, Map $map, Position $start, Position $target)
+    private function putAdjacentNodes(Node $current, Nodes $closed, Nodes $open, Map $map, Position $start, Position $target, $addClosed = false)
     {
         $nodes = [];
         $x = $current->getPosition()->getX();
@@ -156,7 +156,7 @@ class Linefinder
         foreach ($nodes as $node) {
             /** @var Node $node */
             if (
-                (!$closed->contains($node))
+                ((!$closed->contains($node)) || $addClosed)
                 && ($node->getPosition()->getX() < $map->getSizeX())
                 && ($node->getPosition()->getY() < $map->getSizeY())
                 && ($node->getPosition()->getX() >= 0)
@@ -195,9 +195,9 @@ class Linefinder
             $dvParent = $parentNode->getDirectionVector();
         }
 
-        $dCost = 1;
-        if (($dvNode->getX() == $dvParent->getX()) && ($dvNode->getY() == $dvParent->getY())) {
-            $dCost = 0; // !!!
+        $dCost = 0;
+        if ( !(($dvNode->getX() == $dvParent->getX()) && ($dvNode->getY() == $dvParent->getY())) ) {
+            $dCost = 1; // !!!
         }
 
         $node->setDCost($dCost);

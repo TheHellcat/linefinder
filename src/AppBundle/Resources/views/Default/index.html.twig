@@ -5,6 +5,16 @@
 
 {% block body %}
 
-....
+    {{ form_start(form) }}
+
+    {{ form_label(form.terrain) }}<br/>
+    {{ form_errors(form.terrain) }}<br/>
+    {{ form_widget(form.terrain) }}
+
+    <br/><br/>
+
+    {{ form_widget(form.submit) }}
+
+    {{ form_end(form) }}
 
 {% endblock %}

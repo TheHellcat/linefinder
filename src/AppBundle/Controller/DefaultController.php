@@ -3,8 +3,11 @@
 namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use AppBundle\Form\MapInputType;
+use AppBundle\Entity\MapInput;
 
 /**
  * Class DefaultController
@@ -16,71 +19,42 @@ class DefaultController extends Controller
      * @Route("/", name="index")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        $input =
-            '. . . . . . . . . . .
-. . . . . . . . . . .
-. . . . . . . . . . .
-. . 9 . . . . . . . .
-. . 9 . . . . . . . .
-. . 9 . X . . . . . .
-. . 9 . . . . . . . .
-. . 9 9 9 9 9 9 . . .
-. . 9 . . . . . . . .
-. . 9 . . . . . . . .
-. . 9 . . . . . . . .
-. . 9 . . . . . . . .
-. . 9 . . * . . . . .
-. . 9 . . . . . . . .
-. . . . . . . . . . .
-. . . . . . . . . . .
-. . . . . . . . . . .';
-        $input =
-'. . . . . . . . . . . .
-. 9 9 9 . . . . . . . .
-. . . 9 . . . . . . . .
-. X . 9 . . . . . . . .
-. . . 9 . . . . . . . .
-. . . . . . . . . . . .
-. . . 9 . . . . . . . .
-. . . 9 . . . . . . . .
-. . . 9 9 9 9 9 9 . . .
-. . . 9 . . . . . . . .
-. . . 9 . . . . . . . .
-. . . 9 . . . . . . . .
-. . . 9 . . . . . . . .
-. . . 9 . . * . . . . .
-. . . 9 . . . . . . . .
-. . . 9 9 9 9 9 9 9 9 .
-. . . 9 . . . . . . . .
-. . . . . . . . . . . .';
+//        $input =
+//'. . . . . . . . . . . .
+//. 9 9 9 . . . . . . . .
+//. . . 9 . . . . . . . .
+//. X . 9 . . . . . . . .
+//. . . 9 . . . . . . . .
+//. . . . . . . . . . . .
+//. . . 9 . . . . . . . .
+//. . . 9 . . . . . . . .
+//. . . 9 9 9 9 9 9 . . .
+//. . . 9 . . . . . . . .
+//. . . 9 . . . . . . . .
+//. . . 9 . . . . . . . .
+//. . . 9 . . . . . . . .
+//. . . 9 . . * . . . . .
+//. . . 9 . . . . . . . .
+//. . . 9 9 9 9 9 9 9 9 .
+//. . . 9 . . . . . . . .
+//. . . . . . . . . . . .';
 
-        $outputTerrain =
-'. . . . . . . . . . .
-. R E S U L T . . . .
-. . . T E R R A I N .
-. . ^ . . . . . . . .
-. . # . . . . . . . .
-. . # . X . . . . . .
-. . # \\ . . . . . . .
-. . # # # # # > . . .
-. . # / . . . . . . .
-. . # . . . . . . . .
-. . # . . . . . . . .
-. . # . . . . . . . .
-. . # . . * . . . . .
-. . v . . . . . . . .
-. . . . . . . . . . .
-. . . . . . . . . . .
-. . . . . . . . . . .';
+        $form = $this->createForm(MapInputType::class, null, [
+            'action' => $this->generateUrl('index'),
+            'method' => 'POST',
+        ]);
 
-        $pathfinder = $this->get('app.handler.pathfinder.lines');
+        $form->handleRequest($request);
+        /** @var MapInput $formData */
+        $formData = $form->getData();
 
-        $output = $pathfinder->findPath($input, 'asciimap');
+        if ($form->isSubmitted() && $form->isValid()) {
+            $pathfinder = $this->get('app.handler.pathfinder.lines');
+            $output = $pathfinder->findPath($formData->getTerrain(), 'asciimap');
+        }
 
-        dump($output);
-
-        return [];
+        return ['form' => $form->createView()];
     }
 }
