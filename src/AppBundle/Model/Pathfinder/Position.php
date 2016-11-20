@@ -15,6 +15,13 @@ class Position
     private $y;
 
 
+    public function __construct()
+    {
+        $this->x = 0;
+        $this->y = 0;
+    }
+
+
     /**
      * @return int
      */

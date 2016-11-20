@@ -187,20 +187,20 @@ class Linefinder
         // total cost, which is "H + F + terrain modifier - direction vector"
         $tCost = 10 * ((int)$map->get($node->getPosition()->getX(), $node->getPosition()->getY()));
         $dvNode = $this->getDirectionVector($node, $open, $closed);
+        $node->getDirectionVector()->setX( $dvNode->getX() );
+        $node->getDirectionVector()->setY( $dvNode->getY() );
 
         $dvParent = $this->modelManager->pathfinder()->position();
         if (null !== $parentNode) {
-            $dvParent = $this->getDirectionVector($parentNode, $open, $closed);
+            $dvParent = $parentNode->getDirectionVector();
         }
 
-        $dCost = 0;
+        $dCost = 1;
         if (($dvNode->getX() == $dvParent->getX()) && ($dvNode->getY() == $dvParent->getY())) {
             $dCost = 0; // !!!
         }
-        else { $dCost = 1; }
 
-        $t=new Position(); $t->setY($dCost);
-        $node->setDirectionVector($t);
+        $node->setDCost($dCost);
         $node->setCost($node->getHCost() + $node->getFCost() + $tCost + $dCost);
     }
 
@@ -216,7 +216,7 @@ class Linefinder
     {
         $deltaX = abs($a->getX() - $b->getX());
         $deltaY = abs($a->getY() - $b->getY());
-        return (int)(sqrt(pow($deltaX,2) + pow($deltaY,2)));
+        return (int)(sqrt(pow($deltaX, 2) + pow($deltaY, 2)));
 //        return $deltaX + $deltaY;
     }
 

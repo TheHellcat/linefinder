@@ -35,6 +35,20 @@ class Node
     private $fCost;
 
     /**
+     * "Direction vector" cost
+     *
+     * @var integer
+     */
+    private $dCost;
+
+    /**
+     * "Terrain" cost
+     *
+     * @var integer
+     */
+    private $tCost;
+
+    /**
      * @var Position
      */
     private $directionVector;
@@ -43,6 +57,7 @@ class Node
     public function __construct()
     {
         $this->position = new Position();
+        $this->directionVector = new Position();
     }
 
 
@@ -169,6 +184,42 @@ class Node
     public function setDirectionVector($directionVector)
     {
         $this->directionVector = $directionVector;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDCost()
+    {
+        return $this->dCost;
+    }
+
+    /**
+     * @param int $dCost
+     * @return Node
+     */
+    public function setDCost($dCost)
+    {
+        $this->dCost = $dCost;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTCost()
+    {
+        return $this->tCost;
+    }
+
+    /**
+     * @param int $tCost
+     * @return Node
+     */
+    public function setTCost($tCost)
+    {
+        $this->tCost = $tCost;
         return $this;
     }
 }
