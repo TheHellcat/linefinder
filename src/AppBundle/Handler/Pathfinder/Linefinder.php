@@ -90,7 +90,7 @@ class Linefinder
                 $searching = false;
             }
 
-//            $map->set($node->getPosition()->getX(), $node->getPosition()->getY(), $node->getCost());
+//            $map->set($node->getPosition()->getX(), $node->getPosition()->getY(), $node->getDirectionVector()->getX().$node->getDirectionVector()->getY());
 //            echo "<pre>\n";
 //            for ($y = 0; $y < $map->getSizeY(); $y++) {
 //                for ($x = 0; $x < $map->getSizeX(); $x++) {
@@ -195,10 +195,12 @@ class Linefinder
 
         $dCost = 0;
         if (($dvNode->getX() == $dvParent->getX()) && ($dvNode->getY() == $dvParent->getY())) {
-            $dCost = -1; // !!!
+            $dCost = 0; // !!!
         }
-//        else { $dCost = 70; }
+        else { $dCost = 1; }
 
+        $t=new Position(); $t->setY($dCost);
+        $node->setDirectionVector($t);
         $node->setCost($node->getHCost() + $node->getFCost() + $tCost + $dCost);
     }
 
@@ -214,7 +216,8 @@ class Linefinder
     {
         $deltaX = abs($a->getX() - $b->getX());
         $deltaY = abs($a->getY() - $b->getY());
-        return $deltaX + $deltaY;
+        return (int)(sqrt(pow($deltaX,2) + pow($deltaY,2)));
+//        return $deltaX + $deltaY;
     }
 
     /**

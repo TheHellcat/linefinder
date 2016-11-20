@@ -34,6 +34,11 @@ class Node
      */
     private $fCost;
 
+    /**
+     * @var Position
+     */
+    private $directionVector;
+
 
     public function __construct()
     {
@@ -146,6 +151,24 @@ class Node
     public function setFCost($fCost)
     {
         $this->fCost = $fCost;
+        return $this;
+    }
+
+    /**
+     * @return Position
+     */
+    public function getDirectionVector()
+    {
+        return $this->directionVector;
+    }
+
+    /**
+     * @param Position $directionVector
+     * @return Node
+     */
+    public function setDirectionVector($directionVector)
+    {
+        $this->directionVector = $directionVector;
         return $this;
     }
 }
